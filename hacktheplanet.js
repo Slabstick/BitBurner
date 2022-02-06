@@ -11,47 +11,47 @@ export async function main(ns) {
 	var threads = serverRam / scriptRam;
 	/**verliere alle Dezimalstellen */
 	threads = Math.trunc(threads);
-	ns.alert("Threads betragen: " + threads);
+	ns.tprint("Threads betragen: " + threads);
 	await ns.scp("hack.js", "home", serverName);
-	ns.alert("hack.js wurde erfolgreich kopiert!");
+	ns.tprint("hack.js wurde erfolgreich kopiert!");
 	/**Wenn vorhandene Ports gehackt werden können */
 	if (reqPorts <= ns.args[1]) {
-		ns.alert("Die Anzahl der Ports beträgt: " + reqPorts);
+		ns.tprint("Die Anzahl der Ports beträgt: " + reqPorts);
 		/** Falls Rootaccess noch NICHT besteht */
 		if (ns.hasRootAccess(serverName) == false) {
-			ns.alert("Es besteht kein RootAccess!");
+			ns.tprint("Es besteht kein RootAccess!");
 			/**Wenn das benötigte Level unser Level nicht übersteigt */
 			if (persHack >= reqHack) {
-				ns.alert("Das persönliche Hack Level von " + persHack + " ist höher, als das benötigte von " + reqHack);
+				ns.tprint("Das persönliche Hack Level von " + persHack + " ist höher, als das benötigte von " + reqHack);
 				/**Erster Port */
 				if (reqPorts >= 1) {
 					ns.brutessh(serverName);
-					ns.alert("1. Brutessh wurde durchgeführt!");
+					ns.tprint("1. Brutessh wurde durchgeführt!");
 				}
 				/**Zweiter Port */
 				if (reqPorts >= 2) {
 					ns.ftpcrack(serverName);
-					ns.alert("2. ftpcrack wurde durchgeführt!");
+					ns.tprint("2. ftpcrack wurde durchgeführt!");
 				}
 				/**Nuke */
 				ns.nuke(serverName);
-				ns.alert("Der Server wurde genuked!");
+				ns.tprint("Der Server wurde genuked!");
 				/**Nocheinmal checken ob JETZT Rootaccess besteht. Wenn ja, dann starte hack.js */
-				if (ns.hasRootAccess(serverName) == true) {
+				if (ns.hasRootAccess(serverName) == true && ns.getServerMaxRam(serverName) >= 3) {
 					ns.killall(serverName);
-					ns.alert("KillAll durchgeführt.");
+					ns.tprint("KillAll durchgeführt.");
 					ns.exec("hack.js", serverName, threads);
-					ns.alert("hack.js wurde gestartet!");
+					ns.tprint("hack.js wurde gestartet!");
 				} else {
-					ns.alert("Something went wrong");
+					ns.tprint("Zu wenig RAM. RAM beträgt: " + ns.getServerMaxRam(serverName) + 'GB');
 				}
 			}
 			/**Starte hack.js wenn RootAccess schon besteht */
 		} else {
 			ns.killall(serverName);
-			ns.alert("KillAll durchgeführt.");
+			ns.tprint("KillAll durchgeführt.");
 			ns.exec("hack.js", serverName, threads);
-			ns.alert("Hack gestartet");
+			ns.tprint("Hack gestartet");
 		}
 	}
 }
