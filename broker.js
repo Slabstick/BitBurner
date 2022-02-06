@@ -5,12 +5,12 @@ export async function main(ns) {
 	var pricePaid = 0;
 
 	while (true) {
-		
+
 		let date = new Date();
 		let cHours = date.getHours();
 		let cMinutes = date.getMinutes();
 		let cSeconds = date.getSeconds();
-		let curTime = ('0' + cHours).slice(-2)+':'+('0'+ cMinutes).slice(-2)+':'+('0'+cSeconds).slice(-2)+':';
+		let curTime = ('0' + cHours).slice(-2) + ':' + ('0' + cMinutes).slice(-2) + ':' + ('0' + cSeconds).slice(-2) + ':';
 		var stonks = ns.stock.getSymbols().sort(function (a, b) { return ns.stock.getForecast(b) - ns.stock.getForecast(a); })
 
 		for (const stonk of stonks) {
@@ -68,9 +68,9 @@ export async function main(ns) {
 
 				// We need the Price we sold the stonks for and then calculate the money we made by selling
 				var soldFor = ns.stock.getBidPrice(toSell) * amtToSell;
-				var win = soldFor - pricePaid;
+				var win = soldFor - pricePaid - 100000000;
 				ns.tprint(curTime + 'Sell ' + ns.nFormat(amtToSell, '0a') + ' stonks of ' + toSell + ' for ' + ns.nFormat(soldFor, '0a') + ' because Forecast fell to ' + ns.stock.getForecast(toSell));
-				ns.tprint(curTime + 'We made ' + ns.nFormat(win, '0a') + ' because ' + ns.nFormat(soldFor, '0a') + ' times ' + ns.nFormat(amtToSell, '0a') + ' minus ' + ns.nFormat(pricePaid, '0a'));
+				ns.tprint(curTime + 'We made ' + ns.nFormat(win, '0a'));
 				// And now we sell!
 				ns.stock.sell(toSell, amtToSell);
 				// Put invested variable to false so the next round the script knows it can buy again.
@@ -81,11 +81,9 @@ export async function main(ns) {
 				// Wait to Sell
 			} else {
 
-				// ns.tprint('FC of ' + toSell + ' is still ' + ns.stock.getForecast(toSell).toFixed(2) + ' so we wait to sell');
 				var soldFor = ns.stock.getBidPrice(toSell) * amtToSell;
-				var curWinnings = soldFor - pricePaid;
-				ns.print(curTime + 'Until now we generated winnings of ' + ns.nFormat(curWinnings,'0a') + ' with our ' + ns.nFormat(amtToSell, '0a') + ' stonks of ' + toSell,);
-				ns.print(curTime + 'because we paid ' + ns.nFormat(pricePaid, '0a'));
+				var curWinnings = soldFor - pricePaid - 100000000;
+				ns.print(curTime + 'Until now we generated winnings of ' + ns.nFormat(curWinnings, '0a') + ' with our ' + ns.nFormat(amtToSell, '0a') + ' stonks of ' + toSell,);
 				await ns.sleep(6000);
 
 			}
