@@ -34,7 +34,7 @@ export async function main(ns) {
 				sharesToBuy = ns.stock.getMaxShares(toBuy);
 				//In case of max amount, we need the buyout price in a new variable
 				pricePaid = sharesToBuy * ns.stock.getAskPrice(toBuy);
-				ns.tprint(curTime + 'Bought all the stonks of ' + ns.nFormat(sharesToBuy, '0a'));
+				ns.tprint(curTime + 'Bought all the stonks of ' + toBuy + ' with the number of ' + ns.nFormat(sharesToBuy, '0a'));
 
 				// We can invest all our money
 			} else {
@@ -55,7 +55,7 @@ export async function main(ns) {
 			// Buy
 			if (invested == false) {
 
-				ns.tprint(curTime + 'Bought ' + ns.nFormat(sharesToBuy, '0a') + ' Stonks of ' + toBuy + ' for ' + ns.nFormat(Math.floor(pricePaid), '0a') + ' because current Forecast is: ' + ns.stock.getForecast(toBuy).toFixed(2));
+				ns.tprint(curTime + 'Bought ' + ns.nFormat(sharesToBuy, '0a') + ' Stonks of ' + toBuy + ' for ' + ns.nFormat(Math.floor(pricePaid), '$ 0.000a') + ' because current Forecast is: ' + ns.stock.getForecast(toBuy).toFixed(2));
 				ns.stock.buy(stonks[0], sharesToBuy);
 				invested = true;
 				var toSell = toBuy;
@@ -68,9 +68,9 @@ export async function main(ns) {
 
 				// We need the Price we sold the stonks for and then calculate the money we made by selling
 				var soldFor = ns.stock.getBidPrice(toSell) * amtToSell;
-				var win = soldFor - pricePaid - 100000000;
-				ns.tprint(curTime + 'Sell ' + ns.nFormat(amtToSell, '0a') + ' stonks of ' + toSell + ' for ' + ns.nFormat(soldFor, '0a') + ' because Forecast fell to ' + ns.stock.getForecast(toSell));
-				ns.tprint(curTime + 'We made ' + ns.nFormat(win, '0a'));
+				var win = soldFor - pricePaid;
+				ns.tprint(curTime + 'Sell ' + ns.nFormat(amtToSell, '0a') + ' stonks of ' + toSell + ' for ' + ns.nFormat(soldFor, '$0.000a') + ' because Forecast fell to ' + ns.stock.getForecast(toSell).toFixed(2));
+				ns.tprint(curTime + 'We made ' + ns.nFormat(win, '$0.000a'));
 				// And now we sell!
 				ns.stock.sell(toSell, amtToSell);
 				// Put invested variable to false so the next round the script knows it can buy again.
@@ -82,8 +82,8 @@ export async function main(ns) {
 			} else {
 
 				var soldFor = ns.stock.getBidPrice(toSell) * amtToSell;
-				var curWinnings = soldFor - pricePaid - 100000000;
-				ns.print(curTime + 'Until now we generated winnings of ' + ns.nFormat(curWinnings, '0a') + ' with our ' + ns.nFormat(amtToSell, '0a') + ' stonks of ' + toSell,);
+				var curWinnings = soldFor - pricePaid;
+				ns.print(curTime + 'Until now we generated winnings of ' + ns.nFormat(curWinnings, '$0.000a') + ' with our ' + ns.nFormat(amtToSell, '0a') + ' stonks of ' + toSell);
 				await ns.sleep(6000);
 
 			}
