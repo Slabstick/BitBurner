@@ -1,5 +1,5 @@
 /** @param {NS} ns **/
-/** 2 Argumente. 1.:Server 2.:Wieviele Ports wir öffnen können */
+// 2 Arguments. 1.:Server 2.:How many ports you're able to open
 export async function main(ns) {
 	var serverName = ns.args[0];
 	var reqPorts = ns.getServerNumPortsRequired(serverName);
@@ -7,51 +7,67 @@ export async function main(ns) {
 	var reqHack = ns.getServerRequiredHackingLevel(serverName);
 	var serverRam = ns.getServerMaxRam(serverName);
 	var scriptRam = ns.getScriptRam("hack.js");
-	/**Wieviele Threads sind auf dem Server möglich? */
+	// depending on the ram of the target server, calculate how many threads of the hack script it can run
 	var threads = serverRam / scriptRam;
-	/**verliere alle Dezimalstellen */
+	// loose all decimals
 	threads = Math.trunc(threads);
-	ns.tprint("Threads betragen: " + threads);
+	ns.tprint("Max number of threads: " + threads);
 	await ns.scp("hack.js", "home", serverName);
-	ns.tprint("hack.js wurde erfolgreich kopiert!");
-	/**Wenn vorhandene Ports gehackt werden können */
+	ns.tprint("hack.js was copied to target!");
+	// Able to open ports?
 	if (reqPorts <= ns.args[1]) {
-		ns.tprint("Die Anzahl der Ports beträgt: " + reqPorts);
-		/** Falls Rootaccess noch NICHT besteht */
+		ns.tprint("Number of ports to open: " + reqPorts);
+		// Check if rootAccess is already given
 		if (ns.hasRootAccess(serverName) == false) {
-			ns.tprint("Es besteht kein RootAccess!");
-			/**Wenn das benötigte Level unser Level nicht übersteigt */
+			ns.tprint("No RootAccess!");
+			// Check if your hacking level is higher than required
 			if (persHack >= reqHack) {
-				ns.tprint("Das persönliche Hack Level von " + persHack + " ist höher, als das benötigte von " + reqHack);
-				/**Erster Port */
+				ns.tprint("Personal hacking level of " + persHack + " is higher than the required " + reqHack);
+				// Open first port
 				if (reqPorts >= 1) {
 					ns.brutessh(serverName);
-					ns.tprint("1. Brutessh wurde durchgeführt!");
+					ns.tprint("1. Brutessh deployed!");
 				}
-				/**Zweiter Port */
+				// Open second port
 				if (reqPorts >= 2) {
 					ns.ftpcrack(serverName);
-					ns.tprint("2. ftpcrack wurde durchgeführt!");
+					ns.tprint("2. ftpCrack deployed!");
+				}
+				// Open third port
+				if (reqPorts >= 3) {
+					ns.relaysmtp(serverName);
+					ns.tprint("3. relaySMTP deployed!");
+				}
+				// Open fourth port
+				if (reqPorts >= 4) {
+					ns.httpworm(serverName);
+					ns.tprint("4. httpWorm deployed!");
+				}
+				// Open fifth port
+				if (reqPorts >= 5) {
+					ns.sqlinject(serverName);
+					ns.tprint("5. SQLinject deployed!");
 				}
 				/**Nuke */
 				ns.nuke(serverName);
-				ns.tprint("Der Server wurde genuked!");
-				/**Nocheinmal checken ob JETZT Rootaccess besteht. Wenn ja, dann starte hack.js */
+				ns.tprint("Server nuked!");
+				// Check again if rootAccess is given. If so, kill all running scripts to free the RAM and deploy the hack!
 				if (ns.hasRootAccess(serverName) == true && ns.getServerMaxRam(serverName) >= 3) {
 					ns.killall(serverName);
-					ns.tprint("KillAll durchgeführt.");
+					ns.tprint("All scripts killed.");
 					ns.exec("hack.js", serverName, threads);
-					ns.tprint("hack.js wurde gestartet!");
+					ns.tprint("hack.js deployed!");
+				// If the RAM doesn't suffice
 				} else {
-					ns.tprint("Zu wenig RAM. RAM beträgt: " + ns.getServerMaxRam(serverName) + 'GB');
+					ns.tprint("RAM of: " + ns.getServerMaxRam(serverName) + 'GB is not enough to start any script!');
 				}
 			}
-			/**Starte hack.js wenn RootAccess schon besteht */
+			// Start the hack if rootAccess is already given!
 		} else {
 			ns.killall(serverName);
-			ns.tprint("KillAll durchgeführt.");
+			ns.tprint("All scripts killed");
 			ns.exec("hack.js", serverName, threads);
-			ns.tprint("Hack gestartet");
+			ns.tprint("Hack started");
 		}
 	}
 }
