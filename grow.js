@@ -6,7 +6,7 @@ export async function main(ns) {
 
 	while (true) {
 		
-		ns.print("Wenn Servergeld von " + ns.nFormat(ns.getServerMoneyAvailable(serverName), '0a') + " unter dem Threshold von " + ns.nFormat(moneyThresh, '0a') + " liegt, dann führe Grow durch!");
+		ns.print("If the amount of money, namely " + ns.nFormat(ns.getServerMoneyAvailable(serverName), '$0.000a') + " is below the threshold of " + ns.nFormat(moneyThresh, '$0.000a') + ", then grow!");
 		
 		 if (ns.getServerMoneyAvailable(serverName) < moneyThresh) {
 			ns.print("Grow " + serverName + '!')
