@@ -24,18 +24,18 @@ export async function main(ns) {
 
 
 	while (true) {
-		ns.print("Wenn ServerSecurity von " + ns.nFormat(ns.getServerSecurityLevel(ServerName), '0a') + " über dem Threshold von " + ns.nFormat(secThresh, '0a') + " liegt, dann starte Weaken!");
-		ns.print("Wenn Servergeld von " + ns.nFormat(ns.getServerMoneyAvailable(ServerName), '0a') + " unter dem Threshold von " + ns.nFormat(moneyThresh, '0a') + " liegt, dann führe Grow durch!");
+		ns.print("If ServerSecurity " + ns.nFormat(ns.getServerSecurityLevel(ServerName), '0a') + " is higher than the threshold of " + ns.nFormat(secThresh, '0a') + " , start to weaken!");
+		ns.print("If the available money of " + ns.nFormat(ns.getServerMoneyAvailable(ServerName), '$0.000a') + " is lower than the threshold of " + ns.nFormat(moneyThresh, '$0.000a') + " start to grow!");
 		if (ns.getServerSecurityLevel(ServerName) > secThresh) {
-			ns.print("Weaken gestartet!");
+			ns.print("Weaken!");
 			await ns.weaken(ServerName);
 			await ns.sleep(30);
 		} else if (ns.getServerMoneyAvailable(ServerName) < moneyThresh) {
-			ns.print("Grow gestartet!")
+			ns.print("Grow!")
 			await ns.grow(ServerName);
 			await ns.sleep(30);
 		} else {
-			ns.print("Alles ok! Starte Hack!")
+			ns.print("Everything perfect! Give da monies!")
 			await ns.hack(ServerName);
 			await ns.sleep(30);
 		}
